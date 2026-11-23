@@ -52,6 +52,31 @@ build-backend = "setuptools.build_meta"
 where = ["src"]
 ```
 
+**Or let uv generate it.** Instead of typing the file, uv can create the project skeleton and `pyproject.toml` for you. From the folder that should *contain* the project:
+
+```bash
+uv init --package ecusim-tutorial --name ecusim --build-backend setuptools --python 3.10
+cd ecusim-tutorial
+```
+
+What each part does:
+
+| Part | Effect |
+|---|---|
+| `--package` | Makes an installable package with a `src/` layout, so `src/ecusim/__init__.py` exists and `import ecusim` works in tests |
+| `ecusim-tutorial` | The folder to create (omit it to initialise the current folder) |
+| `--name ecusim` | The package name in `[project]`, when it should differ from the folder name |
+| `--build-backend setuptools` | Writes the `[build-system]` table for setuptools. Without it uv picks its own `uv_build` backend, which also works |
+| `--python 3.10` | Sets `requires-python = ">=3.10"` and writes a `.python-version` file |
+
+uv also writes `README.md` and `.gitignore`, and runs `git init` if the folder is not already inside a repository. It does not create `tests/` or `robot_tests/`; make those yourself.
+
+Check the result against the listing above. Two differences to expect:
+
+- uv adds `description`, `readme`, `authors` and a `[project.scripts]` entry pointing at a `main()` function in `src/ecusim/__init__.py`. Delete the `[project.scripts]` table, and empty `__init__.py`, since this tutorial's package has no CLI.
+- With the setuptools backend, uv does not write `[tool.setuptools.packages.find]`. Setuptools finds a `src/` layout on its own, so the table is optional.
+
+You can keep adding to the file with uv rather than by hand: `uv add --dev pytest` (module 0) creates the `[dependency-groups]` table for you.
 `src/ecusim/version.py`:
 
 ```python
