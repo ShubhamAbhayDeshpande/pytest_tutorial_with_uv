@@ -22,9 +22,11 @@ def make_ecu():
     ecu_lst = []
 
     def _make(name="HU", firmware="1.0.0", voltage=12.6):
-        unit=Ecu(name, firmware)
+        unit=Ecu(name)
         unit.battery_voltage=voltage
         unit.connect()
+        if unit.firmware != firmware:
+            unit.install(firmware)
         ecu_lst.append(unit)
         return unit
     
