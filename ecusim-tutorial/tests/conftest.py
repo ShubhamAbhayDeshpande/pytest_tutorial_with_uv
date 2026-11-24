@@ -34,3 +34,11 @@ def make_ecu():
     for units in ecu_lst:
         units.disconnect()
 
+# Fixtures that are expensive to build and distroy, can be used for the entire 
+# test module. This is done by changing the scope of the fixture. 
+@pytest.fixture(scope="session")
+def bench():
+    """Some fixtures like bench are too expensive to build and tear down repeatedly"""
+    print(f"\n[bench] power on")
+    yield {"supply":"PSU-1", "booted": True}
+    print(f"\n [bench] power off")

@@ -24,3 +24,11 @@ def test_check_firmwares_on_ecus(make_ecu):
     ecu_2 = make_ecu(name="HU2", firmware="1.2.2")
     assert (ecu_1.firmware, ecu_2.firmware) == ("1.2.1", "1.2.2")
 
+# Adding testcases to check a fixture with scope="module"
+def test_bench_power_on(bench, ecu):
+    assert bench["booted"]
+    assert ecu.connected
+
+def test_bench_is_shared(bench):
+    assert bench["supply"]=="PSU-1"
+
